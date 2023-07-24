@@ -1,23 +1,11 @@
-def coin_change(lst, amount):
-    if amount == 0:
-        return 0
-    if len(lst) == 1 and amount % lst[0] != 0:
-        return -1
-    if amount in lst:
-        return 1
-    lst.sort(reverse = True)
-    for i in range(0, len(lst)):
-        coin = lst[i] 
-        c = 1
-        while(coin < amount):
-            coin *= 2
-            if coin == amount:
-                return c + 1
-            c += 1
-            if amount - coin in lst:
-                return c + 1
-        
-print(coin_change([1, 2, 5], 11))
+def coin_change(coins, amount):
+    dp = [float('inf') for _ in range(amount + 1)]
+    dp[0] = 0
+    for i in range(0, amount + 1):
+        for c in coins:
+            if i - c >= 0:
+                dp[i] = min(dp[i], dp[i - c] + 1)
+    return dp[-1] if dp[-1] != float('inf') else -1
+print(coin_change([1, 4, 5], 11))
+print(coin_change([2], 0))
 print(coin_change([2], 3))
-print(coin_change([1], 0))
-print(coin_change([1, 2, 3, 5], 14))  
